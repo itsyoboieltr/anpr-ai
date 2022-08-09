@@ -12,7 +12,7 @@
 
 ## General information
 
-This is an AI that was trained on images of number plates to carry out number plate detection and recognition. It works for both image and videos. Video detection also includes object tracking.
+This is an AI that was trained on images of number plates to carry out number plate detection and recognition. It works for both images and videos. Video detection also includes object tracking.
 
 <img width="300" src="https://user-images.githubusercontent.com/72046715/183776545-c51843c9-d350-4f4f-aa4f-1168e6922904.png">
 
