@@ -29,6 +29,6 @@ jobs:
           git config --global user.name "itsyoboieltr"
           git init
           git add .
-          git commit -m "gh sync"
+          git commit -m "${{ github.event.head_commit.message }}"
           git remote add space https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_SPACE
           git push --force space $TARGET_BRANCH

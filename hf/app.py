@@ -259,6 +259,7 @@ def get_plates_from_video(source):
             break 
 
     # When everything done, release the video capture and video write objects
+    
     video.release()
     export.release()
 

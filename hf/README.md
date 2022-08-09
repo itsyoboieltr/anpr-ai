@@ -1,7 +1,7 @@
 ---
-title: anpr-yolov7
-emoji: 💩
-colorFrom: green
+title: Automatic Number-Plate Recognition (YOLOV7)
+emoji: 🚘
+colorFrom: red
 colorTo: gray
 sdk: gradio
 sdk_version: 3.1.4
