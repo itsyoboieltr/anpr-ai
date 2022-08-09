@@ -9,15 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-filesize:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check large files ✔️
-        uses: ActionsDesk/lfs-warning@v2.0
-        with:
-          filesizelimit: 10485760 # this is 10MB so we can sync to HF Spaces
   sync-to-hf:
-    needs: check-filesize
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -38,5 +30,5 @@ jobs:
           git init
           git add .
           git commit -m "gh sync"
-          git remote add space https://huggingface.co/spaces/$HF_SPACE
-          git push --force space main
+          git remote add space https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_SPACE
+          git push --force space $TARGET_BRANCH
