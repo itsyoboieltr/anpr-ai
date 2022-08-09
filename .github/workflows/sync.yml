@@ -1,0 +1,39 @@
+name: Sync to Hugging Face hub
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'hf/**'
+  workflow_dispatch:
+
+jobs:
+  check-filesize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check large files ✔️
+        uses: ActionsDesk/lfs-warning@v2.0
+        with:
+          filesizelimit: 10485760 # this is 10MB so we can sync to HF Spaces
+  sync-to-hf:
+    needs: check-filesize
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Push to HF ⬆️
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_USERNAME: itsyoboieltr
+          HF_SPACE: itsyoboieltr/anpr-yolov7
+          TARGET_BRANCH: main
+        run: |
+          cd hf
+          git init
+          git add .
+          git commit -m "${{ github.event.head_commit.message }}"
+          git remote add space https://huggingface.co/spaces/$HF_SPACE
+          git push --force space main
