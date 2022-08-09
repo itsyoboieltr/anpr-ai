@@ -14,11 +14,15 @@
 
 This is an AI that was trained on images of number plates to carry out number plate detection and recognition. It works for both image and videos. Video detection also includes object tracking.
 
+<img width="300" src="https://user-images.githubusercontent.com/72046715/183776545-c51843c9-d350-4f4f-aa4f-1168e6922904.png">
+
 ## Dataset
 
-For this project, I created the ANPR dataset, a dataset of approx. 30k handpicked images of number plates.
+For this project, I created the [ANPR dataset](https://archive.org/details/anpr-dataset), a dataset of approx. 30k handpicked images of number plates.
 
-[ANPR dataset](https://archive.org/details/anpr-dataset)
+Annotations are in YOLOV7 format.
+
+<img width="600" src="https://user-images.githubusercontent.com/72046715/183776762-7e0d9822-80a1-442e-a111-2fbc03b8213c.png">
 
 ## How does it work
 
