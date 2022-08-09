@@ -185,9 +185,7 @@ def get_best_ocr(preds, rec_conf, ocr_res, track_id):
 def get_plates_from_video(source):
     if source is None:
         return None
-
-    temp_video = f'{Path(source).stem}_temp{Path(source).suffix}'
-
+    
     # Create a VideoCapture object
     video = cv2.VideoCapture(source)
 
@@ -198,10 +196,11 @@ def get_plates_from_video(source):
     fps = video.get(cv2.CAP_PROP_FPS)
 
     # Define the codec and create VideoWriter object.
-    export = cv2.VideoWriter(temp_video, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+    temp = f'{Path(source).stem}_temp{Path(source).suffix}'
+    export = cv2.VideoWriter(temp, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
     
     # Intializing tracker
-    tracker = DeepSort(max_cosine_distance=0.4, embedder_gpu=False)
+    tracker = DeepSort(embedder_gpu=False)
     
     # Initializing some helper variables.
     preds = []
@@ -263,13 +262,12 @@ def get_plates_from_video(source):
     video.release()
     export.release()
 
-    final_video = f'{Path(source).stem}_detected{Path(source).suffix}'
-
     # Compressing the output video for smaller size and web compatibility.
-    
-    os.system(f'ffmpeg -y -i {temp_video} -c:v libx264 -b:v 5000k -minrate 1000k -maxrate 8000k -pass 1 -c:a aac -f mp4 /dev/null && ffmpeg -i {temp_video} -c:v libx264 -b:v 5000k -minrate 1000k -maxrate 8000k -pass 2 -c:a aac -movflags faststart {final_video}')
+    output = f'{Path(source).stem}_detected{Path(source).suffix}'
+    os.system(f'ffmpeg -y -i {temp} -c:v libx264 -b:v 5000k -minrate 1000k -maxrate 8000k -pass 1 -c:a aac -f mp4 /dev/null && ffmpeg -i {temp} -c:v libx264 -b:v 5000k -minrate 1000k -maxrate 8000k -pass 2 -c:a aac -movflags faststart {output}')
+    os.system(f'rm -rf {temp} ffmpeg2pass-0.log ffmpeg2pass-0.log.mbtree')
 
-    return final_video
+    return output
 
 with gr.Blocks() as demo:
     gr.Markdown('### <h3 align="center">Automatic Number Plate Recognition</h3>')
