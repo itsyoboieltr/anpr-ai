@@ -157,12 +157,7 @@ def ocr_plate(plate_region):
 
     # OCR the preprocessed image
     results = paddle.ocr(sharpened, det=False, cls=False)
-
-    try:
-        maxConfidenceResult = max(results, key=lambda result: result[1])
-    except:
-        maxConfidenceResult = ["", 0]
-
+    maxConfidenceResult = max(results, key=lambda result: result[1])
     plate_text, ocr_confidence = maxConfidenceResult
 
     # Filter out anything but uppercase letters, digits, hypens and whitespace.
