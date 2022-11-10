@@ -110,7 +110,7 @@ def detect_plate(source_image):
     # Process detections
     for i, det in enumerate(pred):  # detections per image
         if len(det):
-            # Rescale boxes from img_size to im0 size
+            # Rescale boxes from img_size to source image size
             det[:, :4] = scale_coords(
                 img.shape[2:], det[:, :4], source_image.shape
             ).round()
@@ -157,10 +157,12 @@ def ocr_plate(plate_region):
 
     # OCR the preprocessed image
     results = paddle.ocr(sharpened, det=False, cls=False)
-    maxConfidenceResult = max(
-        results, key=lambda result: result[1] if len(result) > 1 else 0
-    )
-    plate_text, ocr_confidence = maxConfidenceResult
+
+    try:
+        maxConfidenceResult = max(results, key=lambda result: result[1])
+        plate_text, ocr_confidence = maxConfidenceResult
+    except:
+        plate_text, ocr_confidence = "", 0
 
     # Filter out anything but uppercase letters, digits, hypens and whitespace.
     plate_text = re.sub(r"[^-A-Z0-9 ]", r"", plate_text).strip()
