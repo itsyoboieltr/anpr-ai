@@ -1,6 +1,9 @@
 import fileinput
+import itertools
 import os
 import re
+from copy import deepcopy
+from operator import itemgetter
 from pathlib import Path
 from typing import Union
 
@@ -157,12 +160,8 @@ def ocr_plate(plate_region):
 
     # OCR the preprocessed image
     results = paddle.ocr(sharpened, det=False, cls=False)
-
-    try:
-        maxConfidenceResult = max(results, key=lambda result: result[1])
-        plate_text, ocr_confidence = maxConfidenceResult
-    except:
-        plate_text, ocr_confidence = "", 0
+    flattened = list(itertools.chain.from_iterable(results))
+    plate_text, ocr_confidence = max(flattened, key=itemgetter(1), default=("", 0))
 
     # Filter out anything but uppercase letters, digits, hypens and whitespace.
     plate_text = re.sub(r"[^-A-Z0-9 ]", r"", plate_text).strip()
@@ -171,9 +170,6 @@ def ocr_plate(plate_region):
         ocr_confidence = 0
 
     return plate_text, ocr_confidence
-
-
-from copy import deepcopy
 
 
 def get_plates_from_image(input):
