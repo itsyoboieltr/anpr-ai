@@ -22,4 +22,5 @@ jobs:
           TARGET_BRANCH: main
         run: |
           git remote add space https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_SPACE
+          git add . :^ANPR.ipynb
           git push --force space $TARGET_BRANCH
