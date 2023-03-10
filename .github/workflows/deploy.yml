@@ -21,7 +21,6 @@ jobs:
           HF_SPACE: itsyoboieltr/anpr
           TARGET_BRANCH: main
         run: |
-          cd hf
           git config --global init.defaultBranch main
           git config --global user.email "itsyoboieltr@users.noreply.github.com"
           git config --global user.name "itsyoboieltr"
