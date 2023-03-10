@@ -1,9 +1,0 @@
-numpy
-opencv-python
-paddlepaddle
-paddleocr
-deep-sort-realtime
-torch
-torchvision
-tensorflow
-seaborn

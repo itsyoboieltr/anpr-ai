@@ -1,0 +1,5 @@
+ultralytics
+paddlepaddle
+paddleocr
+deep-sort-realtime
+internetarchive

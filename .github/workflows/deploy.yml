@@ -1,15 +1,13 @@
-name: Sync to Hugging Face hub
+name: Deploy to Hugging Face Hub
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'hf/**'
   workflow_dispatch:
 
 jobs:
-  sync-to-hf:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -20,7 +18,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_USERNAME: itsyoboieltr
-          HF_SPACE: itsyoboieltr/anpr-yolov7
+          HF_SPACE: itsyoboieltr/anpr
           TARGET_BRANCH: main
         run: |
           cd hf

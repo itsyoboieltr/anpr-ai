@@ -1,3 +1,13 @@
+---
+title: Automatic Number-Plate Recognition
+emoji: 🚘
+colorFrom: red
+colorTo: gray
+sdk: gradio
+app_file: app.py
+pinned: false
+---
+
 # Automatic Number Plate Recognition
 
 > AI to detect and recognize number plates on vehicles.
@@ -8,7 +18,7 @@
 - [Dataset](#dataset)
 - [How does it work](#how-does-it-work)
 
-## [Live demo](https://itsyoboieltr.github.io/anpr-ai/)
+## [Live demo](https://huggingface.co/spaces/itsyoboieltr/anpr)
 
 ## General information
 
@@ -20,7 +30,7 @@ This is an AI that was trained on images of number plates to carry out number pl
 
 For this project, I created the [ANPR dataset](https://archive.org/details/anpr-dataset), a dataset of approx. 30k handpicked images of number plates.
 
-Annotations are in YOLOV7 format.
+Annotations are in YOLO format.
 
 <img width="600" src="https://user-images.githubusercontent.com/72046715/183776762-7e0d9822-80a1-442e-a111-2fbc03b8213c.png">
 
@@ -28,9 +38,8 @@ Annotations are in YOLOV7 format.
 
 Technologies used:
 
-- [YoloV7](https://github.com/WongKinYiu/yolov7): Object detection model to detect the number plate
+- [YOLOv8](https://github.com/ultralytics/ultralytics): Object detection model to detect the number plate
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR): OCR to read the number plate
 - [Deep SORT](https://github.com/levan92/deep_sort_realtime): Object tracking algorithm for video detection
 
-The YOLOV7 Model was fine-tuned using the ANPR dataset to detect number plates. When a number plate is detected, PaddleOCR is used to read the number plate. For video detection, Deep SORT is used to handle object tracking.
-
+The YOLOv8 Model was fine-tuned using the ANPR dataset to detect number plates. When a number plate is detected, PaddleOCR is used to read the number plate. For video detection, Deep SORT is used to handle object tracking.

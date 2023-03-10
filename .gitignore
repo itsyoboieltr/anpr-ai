@@ -34,3 +34,7 @@ yolov7
 *.mp4
 *.tar.gz
 examples
+anpr-dataset
+runs
+anpr_weights
+anpr_examples_202208
