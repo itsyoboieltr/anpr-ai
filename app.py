@@ -68,7 +68,7 @@ def ocr_plate(src):
         results,
         key=lambda ocr_prediction: max(
             ocr_prediction,
-            key=lambda ocr_prediction_result: ocr_prediction_result[1],
+            key=lambda ocr_prediction_result: ocr_prediction_result[1],  # type: ignore
         ),
     )[0]
 
