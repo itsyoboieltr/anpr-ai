@@ -44,29 +44,26 @@ def crop(img, coords):
     return cropped
 
 
-def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=2.0, threshold=0):
-    blurred = cv2.GaussianBlur(image, kernel_size, sigma)
-    sharpened = float(amount + 1) * image - float(amount) * blurred
-    sharpened = np.maximum(sharpened, np.zeros(sharpened.shape))
-    sharpened = np.minimum(sharpened, 255 * np.ones(sharpened.shape))
-    sharpened = sharpened.round().astype(np.uint8)
-    if threshold > 0:
-        low_contrast_mask = np.absolute(image - blurred) < threshold
-        np.copyto(sharpened, image, where=low_contrast_mask)
-    return sharpened
+def preprocess_image(src):
+    normalize = cv2.normalize(
+        src, np.zeros((src.shape[0], src.shape[1])), 0, 255, cv2.NORM_MINMAX
+    )
+    denoise = cv2.fastNlMeansDenoisingColored(
+        normalize, h=10, hColor=10, templateWindowSize=7, searchWindowSize=15
+    )
+    grayscale = cv2.cvtColor(denoise, cv2.COLOR_BGR2GRAY)
+    threshold = cv2.threshold(grayscale, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    return threshold
 
 
 def ocr_plate(src):
-    # Image pre-processing for more accurate OCR
-    rescaled = cv2.resize(src, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)
-    grayscale = cv2.cvtColor(rescaled, cv2.COLOR_BGR2GRAY)
-    kernel = np.ones((1, 1), np.uint8)
-    dilated = cv2.dilate(grayscale, kernel, iterations=1)
-    eroded = cv2.erode(dilated, kernel, iterations=1)
-    sharpened = unsharp_mask(eroded)
+    # Preprocess the image for better OCR results
+    preprocessed = preprocess_image(src)
 
     # OCR the preprocessed image
-    results = paddle.ocr(sharpened, det=False, cls=True)
+    results = paddle.ocr(preprocessed, det=False, cls=True)
+
+    # Get the best OCR result
     plate_text, ocr_confidence = max(
         results,
         key=lambda ocr_prediction: max(
@@ -76,7 +73,8 @@ def ocr_plate(src):
     )[0]
 
     # Filter out anything but uppercase letters, digits, hypens and whitespace.
-    plate_text_filtered = re.sub(r"[^-A-Z0-9 ]", r"", plate_text).strip()
+    # Also, remove hypens and whitespaces at the first and last positions
+    plate_text_filtered = re.sub(r"[^A-Z0-9- ]", "", plate_text).strip("- ")
 
     return {"plate": plate_text_filtered, "ocr_conf": ocr_confidence}
 
